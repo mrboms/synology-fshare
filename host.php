@@ -13,7 +13,7 @@ class SynoFileHostingFshareVN {
     private $LOG_FILE = '/tmp/fsharevn.log';
     private $TOKEN_FILE = '/tmp/fsharevn.token';
     private $SESSIONID_FILE = '/tmp/fsharevn.sessionid';
-	private $SESSIONIDTIME_FILE = '/tmp/fsharevn.sessionidtime';
+    private $SESSIONIDTIME_FILE = '/tmp/fsharevn.sessionidtime';
 	
     public function __construct($Url, $Username, $Password, $HostInfo) {
         if(strpos($Url,'http://') !== FALSE){
@@ -28,8 +28,9 @@ class SynoFileHostingFshareVN {
         $this->Username = $Username;
         $this->Password = $Password;
 
+	//$this->AppId = "GUxft6Beh3Bf8qKP7GC2IplYJZz1A53JQfRwne0R";
         $this->AppId = "";
-		$this->UserAgent = "";
+        $this->UserAgent = "";
 
         $this->HostInfo = $HostInfo;
 
@@ -58,26 +59,26 @@ class SynoFileHostingFshareVN {
             $needLogin = TRUE;
         }
 		
-		$this->SessionId = $this->getSessionId();
-		if(empty($this->SessionId)) {
-			$this->logInfo("SessionId is empty => need to login to get token");
-            $needLogin = TRUE;
-		}
-		
-		$this->SessionIdTime = $this->getSessionIdTime();
-		if(empty($this->SessionIdTime)) {
-			$this->logInfo("SessionIdTime is empty => need to login to get token");
-            $needLogin = TRUE;
-		}else{
-			$nowdt = new DateTime(Date("Y-m-d H:i:s"));
-			$dt = new DateTime($SessionIdTime);
-			
-			if ($dt < $nowdt){
-				if($this->refreshToken() === RToken_FAIL){
-					$needLogin = TRUE;
-				}
+	$this->SessionId = $this->getSessionId();
+	if(empty($this->SessionId)) {
+		$this->logInfo("SessionId is empty => need to login to get token");
+		$needLogin = TRUE;
+	}
+
+	$this->SessionIdTime = $this->getSessionIdTime();
+	if(empty($this->SessionIdTime)) {
+		$this->logInfo("SessionIdTime is empty => need to login to get token");
+		$needLogin = TRUE;
+	}else{
+		$nowdt = new DateTime(Date("Y-m-d H:i:s"));
+		$dt = new DateTime($SessionIdTime);
+
+		if ($dt < $nowdt){
+			if($this->refreshToken() === RToken_FAIL){
+				$needLogin = TRUE;
 			}
 		}
+	}
         
         if(!file_exists($this->COOKIE_JAR)) {
             $this->logInfo("Cookie file is not existed => need to login to get cookie");
@@ -143,7 +144,7 @@ class SynoFileHostingFshareVN {
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             //"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
-		    "User-Agent:" . $this->UserAgent,
+            "User-Agent:" . $this->UserAgent,
             "Content-Type: application/json",
             'Content-Length: ' . strlen($data_string)
         ));
@@ -159,14 +160,14 @@ class SynoFileHostingFshareVN {
 			// save token to disk
             $this->Token = json_decode($curl_response)->{'token'};
             $this->saveToken($this->Token);
-			// save SessionId to disk
-			$this->SessionId = json_decode($curl_response)->{'session_id'};
-			$this->saveSessionId($this->SessionId);
-			// save SessionIdTime to disk
-			$dt = new DateTime(Date("Y-m-d H:i:s"));
-			$dt->add(new DateInterval('PT6H'));
-			$this->SessionIdTime = $dt->format('Y-m-d H:i:s');
-			$this->saveSessionIdTime($this->SessionIdTime);
+	    // save SessionId to disk
+	    $this->SessionId = json_decode($curl_response)->{'session_id'};
+	    $this->saveSessionId($this->SessionId);
+	    // save SessionIdTime to disk
+	    $dt = new DateTime(Date("Y-m-d H:i:s"));
+	    $dt->add(new DateInterval('PT6H'));
+	    $this->SessionIdTime = $dt->format('Y-m-d H:i:s');
+	    $this->saveSessionIdTime($this->SessionIdTime);
 			
             $this->logInfo("Login ok");
     
@@ -202,7 +203,7 @@ class SynoFileHostingFshareVN {
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             //"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
-		    "User-Agent:" . $this->UserAgent,
+	    "User-Agent:" . $this->UserAgent,
             "Content-Type: application/json",
             'Content-Length: ' . strlen($data_string)
         ));
@@ -218,14 +219,14 @@ class SynoFileHostingFshareVN {
 			// save token to disk
             $this->Token = json_decode($curl_response)->{'token'};
             $this->saveToken($this->Token);
-			// save SessionId to disk
-			$this->SessionId = json_decode($curl_response)->{'session_id'};
-			$this->saveSessionId($this->SessionId);
-			// save SessionIdTime to disk
-			$dt = new DateTime(Date("Y-m-d H:i:s"));
-			$dt->add(new DateInterval('PT6H'));
-			$this->SessionIdTime = $dt->format('Y-m-d H:i:s');
-			$this->saveSessionIdTime($this->SessionIdTime);
+            // save SessionId to disk
+            $this->SessionId = json_decode($curl_response)->{'session_id'};
+            $this->saveSessionId($this->SessionId);
+            // save SessionIdTime to disk
+            $dt = new DateTime(Date("Y-m-d H:i:s"));
+            $dt->add(new DateInterval('PT6H'));
+            $this->SessionIdTime = $dt->format('Y-m-d H:i:s');
+            $this->saveSessionIdTime($this->SessionIdTime);
 			
             $this->logInfo("Refresh Token ok");
     
@@ -250,7 +251,7 @@ class SynoFileHostingFshareVN {
 
         $curl = curl_init($service_url);
         $data = array(
-			"url" => $this->Url,
+            "url" => $this->Url,
             "password" => "",
             "token" => $this->Token,
             "zipflag" => false
@@ -266,8 +267,8 @@ class SynoFileHostingFshareVN {
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             //"User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
-		    "User-Agent:" . $this->UserAgent,
-			"Cookie: session_id=" . $this->SessionId,
+            "User-Agent:" . $this->UserAgent,
+            "Cookie: session_id=" . $this->SessionId,
             "Content-Type: application/json",
             'Content-Length: ' . strlen($data_string)
         ));
