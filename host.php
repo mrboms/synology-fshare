@@ -157,7 +157,7 @@ class SynoFileHostingFshareVN {
         }
         else
         {
-			// save token to disk
+	    // save token to disk
             $this->Token = json_decode($curl_response)->{'token'};
             $this->saveToken($this->Token);
 	    // save SessionId to disk
@@ -216,7 +216,7 @@ class SynoFileHostingFshareVN {
         }
         else
         {
-			// save token to disk
+	    // save token to disk
             $this->Token = json_decode($curl_response)->{'token'};
             $this->saveToken($this->Token);
             // save SessionId to disk
@@ -307,8 +307,8 @@ class SynoFileHostingFshareVN {
         error_log($prefix . " - " . date('Y-m-d H:i:s') . " - " . $msg . "\n", 3, $this->LOG_FILE);
     }
 
-	//save and get
-	//Token
+    //save and get
+    //Token
     private function saveToken($token) {
         $myfile = fopen($this->TOKEN_FILE, "w");
         fwrite($myfile, $token);
